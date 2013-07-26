@@ -1,5 +1,12 @@
 require 'spec_helper'
 
+def expect_errors
+ last_response.should_not be_ok
+  error =  JSON::parse(last_response.body)
+  expect(error).to include('error')
+end
+
+
 describe "POST on quoting" do
 
   def body
@@ -27,24 +34,30 @@ describe "POST on quoting" do
 
     it "needs a pickup postcode" do
       post '/quotes',
-           {quote: {pickup_postcode: 'SW1A 1AA'}}.to_json,
+           {quote: {pickup_postcode: 'SW1A 1AA',
+                    vehicle: 'bicycle'}}.to_json,
            {'Content-Type' => 'application/json'}
 
-      last_response.should_not be_ok
+      expect_errors
 
-      error =  JSON::parse(last_response.body)
-      expect(error).to include('error')
     end
 
     it "needs a delivery postcode" do
       post '/quotes',
-           {quote: {delivery_postcode: 'EC2A 3LT'}}.to_json,
+           {quote: {delivery_postcode: 'EC2A 3LT',
+                    vehicle: 'bicyle'}}.to_json,
            {'Content-Type' => 'application/json'}
 
-      last_response.should_not be_ok
+      expect_errors
+    end
 
-      error =  JSON::parse(last_response.body)
-      expect(error).to include('error')
+    it "needs a vehicle" do
+      post '/quotes',
+           {quote: {pickup_postcode:   'SW1A 1AA',
+                    delivery_postcode: 'EC2A 3LT'}}.to_json,
+           {'Content-Type' => 'application/json'}
+
+      expect_errors
     end
 
   end
