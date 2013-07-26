@@ -4,7 +4,8 @@ describe "POST on quoting" do
 
   def body
     {quote: {pickup_postcode:   'SW1A 1AA',
-             delivery_postcode: 'EC2A 3LT'}}.to_json
+             delivery_postcode: 'EC2A 3LT',
+             vehicle: "car"}}.to_json
   end
 
   it "respond to quotes requests" do
@@ -18,6 +19,7 @@ describe "POST on quoting" do
     expect(quote['pickup_postcode']).to eql "SW1A 1AA"
     expect(quote['delivery_postcode']).to eql "EC2A 3LT"
     expect(quote['price']).to eql 679
+    expect(quote['vehicle']).to eql('car')
 
   end
 
@@ -46,4 +48,6 @@ describe "POST on quoting" do
     end
 
   end
+
+
 end
