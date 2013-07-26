@@ -20,4 +20,30 @@ describe "POST on quoting" do
     expect(quote['price']).to eql 679
 
   end
+
+  context "minimal error management" do
+
+    it "needs a pickup postcode" do
+      post '/quotes',
+           {quote: {pickup_postcode: 'SW1A 1AA'}}.to_json,
+           {'Content-Type' => 'application/json'}
+
+      last_response.should_not be_ok
+
+      error =  JSON::parse(last_response.body)
+      expect(error).to include('error')
+    end
+
+    it "needs a delivery postcode" do
+      post '/quotes',
+           {quote: {delivery_postcode: 'EC2A 3LT'}}.to_json,
+           {'Content-Type' => 'application/json'}
+
+      last_response.should_not be_ok
+
+      error =  JSON::parse(last_response.body)
+      expect(error).to include('error')
+    end
+
+  end
 end

@@ -14,6 +14,7 @@ class Quote
   def to_h
     h = {}
     [:pickup_postcode, :delivery_postcode, :price].each do |i|
+      raise_exception if send(i).nil?
       h[i] = send(i)
     end
     h
