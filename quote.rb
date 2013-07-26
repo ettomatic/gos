@@ -8,7 +8,7 @@ class Quote
   end
 
   def price
-    679
+    ((pickup_postcode.to_i(36) - delivery_postcode.to_i(36)) / 1000).abs
   end
 
   def to_h
